@@ -19,7 +19,7 @@ gulp.task('sass', function(){
     .pipe(sass({
       outputStyle:'compressed'
     }))
-    .pipe(rename('campanher.css'))
+    .pipe(rename('main.css'))
     .pipe(gulp.dest('./css'))
 });
 gulp.task('watch', function(){
