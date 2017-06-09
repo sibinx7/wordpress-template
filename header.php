@@ -24,11 +24,6 @@
            <img src="<?php echo $c_img_logo?>" alt="<?php echo $blog_name?>">
          </a>
          <div class="collapse navbar-collapse align-content-end c-collpase-menu" id="navbarTogglerDemo01">
-           <ul class="social-media-and-top ">
-             <li class="f-icon"><a href=""><span class="fa fa-linkedin"></span></a></li>
-             <li class="f-icon"><a href=""><span class="fa fa-facebook"></span></a></li>
-             <li><a href="">(55) 3251-2761</a></li>
-           </ul>
            <?php
             if(has_nav_menu('c_header_menu')){
               get_campanher_header_menu('c_header_menu',[]);
