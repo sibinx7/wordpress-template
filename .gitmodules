@@ -1,6 +1,3 @@
-[submodule "scss-starter"]
-	path = scss-starter
-	url = git@github.com:sibinx7/scss-starter.git
 [submodule "js-scss-assets"]
 	path = js-scss-assets
 	url = git@github.com:sibinx7/js-scss-assets.git
