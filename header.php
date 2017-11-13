@@ -26,7 +26,7 @@
          <div class="collapse navbar-collapse align-content-end c-collpase-menu" id="navbarTogglerDemo01">
            <?php
             if(has_nav_menu('c_header_menu')){
-              get_campanher_header_menu('c_header_menu',[]);
+              get_default_header_menu('c_header_menu',[]);
             }
            ?>
          </div>
