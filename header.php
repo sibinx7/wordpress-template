@@ -14,24 +14,26 @@
         $c_img_logo = get_stylesheet_directory_uri().'/images/logo.jpg';
         $blog_name  = get_bloginfo('name');
       ?>
-      <nav class="navbar navbar-toggleable-md navbar-light bg-faded c-custom-header">
-       <div class="container">
-
+      <nav class="nav-outer">
+        <div class="container">
+        <nav class="navbar navbar-expand-lg c-custom-header">    
          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
            <span class="navbar-toggler-icon"></span>
          </button>
          <a class="navbar-brand" href="<?php echo get_home_url()?>">
            <img src="<?php echo $c_img_logo?>" alt="<?php echo $blog_name?>">
          </a>
-         <div class="collapse navbar-collapse align-content-end c-collpase-menu" id="navbarTogglerDemo01">
+         <div class="collapse navbar-collapse  c-collpase-menu" id="navbarTogglerDemo01">
            <?php
             if(has_nav_menu('c_header_menu')){
               get_default_header_menu('c_header_menu',[]);
             }
            ?>
          </div>
-       </div>
+      
       </nav>
+        </div>
+      </nav>      
       </header>
 			<!-- END HEADER SECTION -->
 
