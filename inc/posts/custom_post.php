@@ -9,10 +9,12 @@ class CustomPost{
   protected  $labels;
   protected  $args;
   protected $name;
-  protected $plural;
-  public function __construct($name,$plural,$settings=[]){
+	protected $plural;
+	protected $post_type;
+  public function __construct($post_type,$name,$plural,$settings=[]){
     $this->name = $name;
-    $this->plural = $plural;
+		$this->plural = $plural;
+		$this->post_type = $post_type;
     $labels = [];
     $args   = [];
     if(isset($settings['labels'])) $labels = $settings['labels'];
@@ -85,8 +87,8 @@ class CustomPost{
 
   }
 
-  function register_post($name) {
-    register_post_type( $name, $this->args);
+  function register_post($post_type) {
+    register_post_type( $post_type, $this->args);
 
 
   }
