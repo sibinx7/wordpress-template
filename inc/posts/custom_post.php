@@ -21,7 +21,7 @@ class CustomPost{
     if(isset($settings['args'])) $args = $settings['args'];
     $this->set_labels($labels);
     $this->set_args($args);
-    $this->register_post($name);
+    $this->register_post($post_type);
 
   }
 
