@@ -14,7 +14,7 @@ foreach($allowed_posts as $post){
 
  
 function add_custom_posts(){
-
+	
 }
 
 add_action( 'init', 'add_custom_posts');
