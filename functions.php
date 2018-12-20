@@ -1,145 +1,161 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: sibin
- * Date: 1/1/2017
- * Time: 8:11 PM
+ * basic functions and definitions
+ *
+ * @link https://developer.wordpress.org/themes/basics/theme-functions/
+ *
+ * @package basic
  */
 
+if ( ! function_exists( 'basic_setup' ) ) :
+	/**
+	 * Sets up theme defaults and registers support for various WordPress features.
+	 *
+	 * Note that this function is hooked into the after_setup_theme hook, which
+	 * runs before the init hook. The init hook is too late for some features, such
+	 * as indicating support for post thumbnails.
+	 */
+	function basic_setup() {
+		/*
+		 * Make theme available for translation.
+		 * Translations can be filed in the /languages/ directory.
+		 * If you're building a theme based on basic, use a find and replace
+		 * to change 'basic' to the name of your theme in all the template files.
+		 */
+		load_theme_textdomain( 'basic', get_template_directory() . '/languages' );
 
-	add_theme_support('post-thumbnails');
-	add_theme_support('html5');
+		// Add default posts and comments RSS feed links to head.
+		add_theme_support( 'automatic-feed-links' );
+
+		/*
+		 * Let WordPress manage the document title.
+		 * By adding theme support, we declare that this theme does not use a
+		 * hard-coded <title> tag in the document head, and expect WordPress to
+		 * provide it for us.
+		 */
+		add_theme_support( 'title-tag' );
+
+		/*
+		 * Enable support for Post Thumbnails on posts and pages.
+		 *
+		 * @link https://developer.wordpress.org/themes/functionality/featured-images-post-thumbnails/
+		 */
+		add_theme_support( 'post-thumbnails' );
+
+		// This theme uses wp_nav_menu() in one location.
+		register_nav_menus( array(
+			'menu-1' => esc_html__( 'Primary', 'basic' ),
+		) );
+
+		/*
+		 * Switch default core markup for search form, comment form, and comments
+		 * to output valid HTML5.
+		 */
+		add_theme_support( 'html5', array(
+			'search-form',
+			'comment-form',
+			'comment-list',
+			'gallery',
+			'caption',
+		) );
+
+		// Set up the WordPress core custom background feature.
+		add_theme_support( 'custom-background', apply_filters( 'basic_custom_background_args', array(
+			'default-color' => 'ffffff',
+			'default-image' => '',
+		) ) );
+
+		// Add theme support for selective refresh for widgets.
+		add_theme_support( 'customize-selective-refresh-widgets' );
+
+		/**
+		 * Add support for core custom logo.
+		 *
+		 * @link https://codex.wordpress.org/Theme_Logo
+		 */
+		add_theme_support( 'custom-logo', array(
+			'height'      => 250,
+			'width'       => 250,
+			'flex-width'  => true,
+			'flex-height' => true,
+		) );
+	}
+endif;
+add_action( 'after_setup_theme', 'basic_setup' );
 
 /**
- * Stylesheet
+ * Set the content width in pixels, based on the theme's design and stylesheet.
+ *
+ * Priority 0 to make it available to lower priority callbacks.
+ *
+ * @global int $content_width
  */
-	function theme_stylesheets(){
-		wp_enqueue_style('stylesheet', get_stylesheet_uri());
-		wp_enqueue_style('main', get_stylesheet_directory_uri().'/stylesheets/main.css');
-	
+function basic_content_width() {
+	// This variable is intended to be overruled from themes.
+	// Open WPCS issue: {@link https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/issues/1043}.
+	// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
+	$GLOBALS['content_width'] = apply_filters( 'basic_content_width', 640 );
+}
+add_action( 'after_setup_theme', 'basic_content_width', 0 );
+
+/**
+ * Register widget area.
+ *
+ * @link https://developer.wordpress.org/themes/functionality/sidebars/#registering-a-sidebar
+ */
+function basic_widgets_init() {
+	register_sidebar( array(
+		'name'          => esc_html__( 'Sidebar', 'basic' ),
+		'id'            => 'sidebar-1',
+		'description'   => esc_html__( 'Add widgets here.', 'basic' ),
+		'before_widget' => '<section id="%1$s" class="widget %2$s">',
+		'after_widget'  => '</section>',
+		'before_title'  => '<h2 class="widget-title">',
+		'after_title'   => '</h2>',
+	) );
+}
+add_action( 'widgets_init', 'basic_widgets_init' );
+
+/**
+ * Enqueue scripts and styles.
+ */
+function basic_scripts() {
+	wp_enqueue_style( 'basic-style', get_stylesheet_uri() );
+
+	wp_enqueue_script( 'basic-navigation', get_template_directory_uri() . '/js/navigation.js', array(), '20151215', true );
+
+	wp_enqueue_script( 'basic-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), '20151215', true );
+
+	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
+		wp_enqueue_script( 'comment-reply' );
 	}
+}
+add_action( 'wp_enqueue_scripts', 'basic_scripts' );
 
-	function theme_script(){
-		wp_enqueue_script('bootstrap-libs',get_stylesheet_directory_uri().'/javascripts/bootstrap-libs.js',[],false,true);
-    wp_enqueue_script('common-3rd-libs',get_stylesheet_directory_uri().'/javascripts/common-3rd-libs.js',[],false,true);
-    wp_enqueue_script('main-js',get_stylesheet_directory_uri().'/javascripts/main-es6.js',[],false,true);
-	}
+/**
+ * Implement the Custom Header feature.
+ */
+require get_template_directory() . '/inc/custom-header.php';
 
-	add_action('wp_enqueue_scripts','theme_stylesheets');
-	add_action('wp_enqueue_scripts','theme_script');
+/**
+ * Custom template tags for this theme.
+ */
+require get_template_directory() . '/inc/template-tags.php';
 
-	add_action('init','default_header_menu');
+/**
+ * Functions which enhance the theme by hooking into WordPress.
+ */
+require get_template_directory() . '/inc/template-functions.php';
 
-	function default_header_menu(){
-	  register_nav_menu('c_header_menu',__('Header Menu',''));
-  }
+/**
+ * Customizer additions.
+ */
+require get_template_directory() . '/inc/customizer.php';
 
-function get_default_header_menu($theme_location,$options=[]){
-	$theme_location_slug = create_slug($theme_location);
-  $default_options = [
-    'class' => "navbar-nav ml-auto $theme_location_slug"
-  ];
-
-  $options = array_merge($default_options,$options);
-  $locations = get_nav_menu_locations();
-  if(isset($theme_location) &&  isset($locations) && $locations[$theme_location]){
-    $menu = get_term($locations[$theme_location],'nav_menu');
-    $site_url = get_site_url();
-    $menu_items = wp_get_nav_menu_items($menu->term_id);
-    $max_menu_items = sizeof($menu_items);
-    $menu_tpl = [];
-    $menu_tpl_outer = "<ul class='".$options['class']."'>";
-    $bool = false;
-    try{
-      foreach ($menu_items as $key => $menu_item){
-        if( $menu_item->menu_item_parent == 0 ) {
-          $parent = $menu_item->ID;
-          $menu_array = array();
-          foreach( $menu_items as $submenu ) {
-            if( $submenu->menu_item_parent == $parent ) {
-              $bool = true;
-              $menu_array[] = '<li class="nav-item"><a href="' . $submenu->url . '" class="nav-item">' . $submenu->title . '</a></li>' ."\n";
-            }
-          }
-
-          if( $bool == true && count( $menu_array ) > 0 ) {
-            $menu_tpl_a = "";
-            $menu_tpl_a .= '<li class="dropdown nav-item">' ."\n";
-            $menu_tpl_a .= '<a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">' . $menu_item->title . '</a>' ."\n";
-
-            $menu_tpl_a .= '<ul class="dropdown-menu">' ."\n";
-            $menu_tpl_a .= implode( "\n", $menu_array );
-            $menu_tpl_a .= '</ul>' ."\n";
-            $menu_tpl_a .= '</li>' ."\n";
-            array_push($menu_tpl,$menu_tpl_a);
-          } else {
-            $menu_tpl_a = "";
-            $menu_tpl_a .= '<li class="nav-item">' ."\n";
-            $menu_tpl_a .= '<a href="' . $menu_item->url . '" class="nav-link">' . $menu_item->title . '</a>' ."\n";
-            $menu_tpl_a .= '</li>' ."\n";
-            array_push($menu_tpl,$menu_tpl_a);
-          }
-
-        }
-//        if(($max_menu_items) > 1 && $menu_item_number == round($max_menu_items/2)){
-//          $menu_tpl .=  "<li class='home-brand hidden-xs hidden-sm'><a href='$site_url'><div>".get_bloginfo('name')."</div></a></li>";
-//        }
-
-      }
-    }catch (Exception $e){
-      var_dump($e->getMessage());
-    }
-    $menu_tpl_outer .= implode("\n",  $menu_tpl);
-    $menu_tpl_outer .= "</ul>";
-    echo ($menu_tpl_outer);
-  }
+/**
+ * Load Jetpack compatibility file.
+ */
+if ( defined( 'JETPACK__VERSION' ) ) {
+	require get_template_directory() . '/inc/jetpack.php';
 }
 
-add_filter('excerpt_more','new_excerpt_more');
-function new_excerpt_more($more){
-  return '';
-}
-add_filter('excerpt_length','new_excerpt_length');
-function new_excerpt_length($length){
-  return 40;
-}
-
-
-function create_slug($str, $delimiter = '-'){
-  $slug = strtolower(trim(preg_replace('/[\s-]+/', $delimiter, preg_replace('/[^A-Za-z0-9-]+/', $delimiter, preg_replace('/[&]/', 'and', preg_replace('/[\']/', '', iconv('UTF-8', 'ASCII//TRANSLIT', $str))))), $delimiter));
-  return $slug;
-
-}
-
-
-function custom_excerpt($limit) {
-	$excerpt = explode(' ', get_the_excerpt(), $limit);
-
-	if (count($excerpt) >= $limit) {
-			array_pop($excerpt);
-			$excerpt = implode(" ", $excerpt) . '...';
-	} else {
-			$excerpt = implode(" ", $excerpt);
-	}
-
-	$excerpt = preg_replace('`\[[^\]]*\]`', '', $excerpt);
-
-	return $excerpt;
-}
-
-function content($limit) {
-$content = explode(' ', get_the_content(), $limit);
-
-if (count($content) >= $limit) {
-		array_pop($content);
-		$content = implode(" ", $content) . '...';
-} else {
-		$content = implode(" ", $content);
-}
-
-$content = preg_replace('/\[.+\]/','', $content);
-$content = apply_filters('the_content', $content); 
-$content = str_replace(']]>', ']]&gt;', $content);
-
-return $content;
-}

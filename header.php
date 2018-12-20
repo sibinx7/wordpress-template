@@ -1,39 +1,58 @@
-<html>
-	<head>
-		<?php wp_head()?>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="charset" content="utf-8">
-		<meta name="author" content="Sibin Xavier">
-		<title><?php echo wp_title()?></title>
-	</head>
-	<body>
-		<div class="wrapper">
-			<!-- HEADER SECTION -->
-      <header class="c-header">
-      <?php
-        $c_img_logo = get_stylesheet_directory_uri().'/images/logo.jpg';
-        $blog_name  = get_bloginfo('name');
-      ?>
-      <nav class="nav-outer">
-        <div class="container">
-        <nav class="navbar navbar-expand-lg c-custom-header">    
-         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-           <span class="navbar-toggler-icon"></span>
-         </button>
-         <a class="navbar-brand" href="<?php echo get_home_url()?>">
-           <img src="<?php echo $c_img_logo?>" alt="<?php echo $blog_name?>">
-         </a>
-         <div class="collapse navbar-collapse  c-collpase-menu" id="navbarTogglerDemo01">
-           <?php
-            if(has_nav_menu('c_header_menu')){
-              get_default_header_menu('c_header_menu',[]);
-            }
-           ?>
-         </div>
-      
-      </nav>
-        </div>
-      </nav>      
-      </header>
-			<!-- END HEADER SECTION -->
+<?php
+/**
+ * The header for our theme
+ *
+ * This is the template that displays all of the <head> section and everything up until <div id="content">
+ *
+ * @link https://developer.wordpress.org/themes/basics/template-files/#template-partials
+ *
+ * @package basic
+ */
 
+?>
+<!doctype html>
+<html <?php language_attributes(); ?>>
+<head>
+	<meta charset="<?php bloginfo( 'charset' ); ?>">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="profile" href="https://gmpg.org/xfn/11">
+
+	<?php wp_head(); ?>
+</head>
+
+<body <?php body_class(); ?>>
+<div id="page" class="site">
+	<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'basic' ); ?></a>
+
+	<header id="masthead" class="site-header">
+		<div class="site-branding">
+			<?php
+			the_custom_logo();
+			if ( is_front_page() && is_home() ) :
+				?>
+				<h1 class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>
+				<?php
+			else :
+				?>
+				<p class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></p>
+				<?php
+			endif;
+			$basic_description = get_bloginfo( 'description', 'display' );
+			if ( $basic_description || is_customize_preview() ) :
+				?>
+				<p class="site-description"><?php echo $basic_description; /* WPCS: xss ok. */ ?></p>
+			<?php endif; ?>
+		</div><!-- .site-branding -->
+
+		<nav id="site-navigation" class="main-navigation">
+			<button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false"><?php esc_html_e( 'Primary Menu', 'basic' ); ?></button>
+			<?php
+			wp_nav_menu( array(
+				'theme_location' => 'menu-1',
+				'menu_id'        => 'primary-menu',
+			) );
+			?>
+		</nav><!-- #site-navigation -->
+	</header><!-- #masthead -->
+
+	<div id="content" class="site-content">

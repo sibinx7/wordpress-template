@@ -1,31 +1,40 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: sibin
- * Date: 1/1/2017
- * Time: 8:38 PM
+ * The template for displaying all pages
+ *
+ * This is the template that displays all pages by default.
+ * Please note that this is the WordPress construct of pages
+ * and that other 'pages' on your WordPress site may use a
+ * different template.
+ *
+ * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
+ *
+ * @package basic
  */
 
-  get_header();
+get_header();
 ?>
-<div class="page wrapper wrapper single-page single-blog-post padding-tb-50">
-  <div class="container">
-    <div class="row">
-      <div class="col-12">
-        <?php
-          if(have_posts()){
-            while(have_posts()){
-              the_post();
-              get_template_part('content','page');
-            }
-          }else{
-            get_template_part('content','none');
-          }
-        ?>
-      </div>
-    </div>
-  </div>
-</div>
+
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main">
+
+		<?php
+		while ( have_posts() ) :
+			the_post();
+
+			get_template_part( 'template-parts/content', 'page' );
+
+			// If comments are open or we have at least one comment, load up the comment template.
+			if ( comments_open() || get_comments_number() ) :
+				comments_template();
+			endif;
+
+		endwhile; // End of the loop.
+		?>
+
+		</main><!-- #main -->
+	</div><!-- #primary -->
+
 <?php
-  get_footer();
-?>
+get_sidebar();
+get_footer();
